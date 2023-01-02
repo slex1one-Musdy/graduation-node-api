@@ -1,13 +1,19 @@
 const express = require("express");
 const profileRouter = express.Router();
-const { profileImageUpload } = require("../Helpers/multer");
+const { imageUpload } = require("../Helpers/multer");
 const profileController = require("../Controllers/profile");
+const { validateProfileOwner } = require("../Middlewares/profile");
 
 profileRouter.get("/", profileController.getMyProfile);
 profileRouter.get("/me", profileController.getMyProfile);
 profileRouter.put(
-    "/edit",
-    profileImageUpload.single("profileImage"),
+    "/edit/:profileID", [
+        imageUpload.fields([
+            { name: "profileImage", maxCount: 1 },
+            { name: "coverImage", maxCount: 1 },
+        ]),
+        validateProfileOwner,
+    ],
     profileController.editMyProfile
 );
 

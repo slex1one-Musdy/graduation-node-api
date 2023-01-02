@@ -92,8 +92,7 @@ module.exports = {
         userField.editedById = req.user.id;
 
         const updatedProfileImage = await cloudinary.uploader.upload(
-            req.file.path,
-            options
+            req.file.path, {...options, folder: "GraduationProject/ProfileImages" }
         );
         const profileImage =
             process.env.NODE_ENV == "development" ?

@@ -1,26 +1,21 @@
 const multer = require("multer");
 const CustomError = require("../Helpers/CustomError");
 const path = require("path");
-const { v4: uuidv4 } = require("uuid");
-const randomUniqueIDGenerator = () => {
-    return Date.now().toString() + uuidv4();
-};
 
 //multers disk storage setting //KAYIT AYARLARI / KAYDETME AYARLARI
 const storage = multer.diskStorage({
     //DETERMINES THE FILE NAME (best choice is give names according to user id)
 
     filename: function(req, file, cb) {
-        req.profileImage = file.fieldname + randomUniqueIDGenerator();
+        req[file.fieldname] = file.fieldname;
 
-        cb(null, req.profileImage); //user id olsun resimlerin adlari
+        cb(null, req[file.fieldname]); //user id olsun resimlerin adlari
     },
 });
 
 //Multer Settings //MULTER AYARLARI / FILTRELEME vs
 const upload = multer({
     storage: storage,
-
     //Restrict the file extension (png,jpeg,jpg and giff only valid ones)
     fileFilter: function(req, file, cb) {
         //Declaring the extension of the file
@@ -40,5 +35,5 @@ const upload = multer({
 
 module.exports = {
     //Middleware
-    profileImageUpload: multer(upload),
+    imageUpload: multer(upload),
 };

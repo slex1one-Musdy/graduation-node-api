@@ -1,6 +1,6 @@
 const express = require("express");
 const adminRouter = express.Router();
-const { profileImageUpload } = require("../Helpers/multer");
+const { imageUpload } = require("../Helpers/multer");
 const adminController = require("../Controllers/admin");
 
 adminRouter.get("/users", adminController.getAllUsers);
@@ -10,7 +10,7 @@ adminRouter.put(
 );
 adminRouter.put(
     "/update-user/:id",
-    profileImageUpload.single("profileImage"),
+    imageUpload.single("profileImage"),
     adminController.updateUser
 );
 adminRouter.delete("/remove-user/:id", adminController.removeUser);

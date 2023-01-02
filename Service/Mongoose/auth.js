@@ -12,7 +12,7 @@ const { NODE_ENV } = process.env;
 
 const createAssociatedModel = async(userId, requestBody) => {
     const TYPES = { STUDENT_TYPE: "student", STAFF_TYPE: "staff" };
-    console.log(requestBody.userType);
+
     switch (requestBody.userType) {
         case TYPES.STUDENT_TYPE:
             const existedStudent = await Student.findOne({
@@ -43,12 +43,12 @@ module.exports = {
         const newUser = new User({
             _id: newUserID,
             ...req.body,
-            profileImage: req.file.path,
+            profileImage: req.profileImage,
         });
 
         const newProfile = new Profile({
             userId: newUserID,
-            coverImage: "https://res.cloudinary.com/dnxgeilts/image/upload/v1672304687/pexels-photo-268941.jpeg_z1ltgh.jpg",
+            coverImage: "https://res.cloudinary.com/dnxgeilts/image/upload/v1672618772/GraduationProject/CoverImages/pexels-photo-268941.jpeg_z1ltgh_xqfsnd.jpg",
         });
 
         // Hash the password
@@ -58,8 +58,7 @@ module.exports = {
             await newUser.validate();
             await createAssociatedModel(newUserID, req.body);
             const uploadedProfileImage = await cloudinary.uploader.upload(
-                req.file.path,
-                options
+                req.file.path, {...options, folder: "GraduationProject/ProfileImages" }
             );
             const profileImage =
                 NODE_ENV == "development" ?

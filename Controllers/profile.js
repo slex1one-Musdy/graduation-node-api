@@ -10,15 +10,17 @@ module.exports = {
     },
     getAllProfiles: async(req, res, next) => {
         try {
-            const allProfileResponse = await mongooseProfileService.allProfiles();
+            const allProfileResponse = await mongooseProfileService.allProfiles(req);
             return res.status(200).json({...allProfileResponse });
         } catch (error) {
             return next(error);
         }
     },
-    editMyProfile: async() => {
+    editMyProfile: async(req, res, next) => {
         try {
-            const editMyProfileResponse = await mongooseProfileService.editProfile();
+            const editMyProfileResponse = await mongooseProfileService.editProfile(
+                req
+            );
             return res.status(200).json({...editMyProfileResponse });
         } catch (error) {
             return next(error);
