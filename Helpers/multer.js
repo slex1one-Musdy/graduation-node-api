@@ -5,9 +5,12 @@ const path = require("path");
 //multers disk storage setting //KAYIT AYARLARI / KAYDETME AYARLARI
 const storage = multer.diskStorage({
     //DETERMINES THE FILE NAME (best choice is give names according to user id)
-
+    destination: function(req, file, cb) {
+        cb(null, path.join(__dirname, "../public/uploads"));
+    },
     filename: function(req, file, cb) {
-        req[file.fieldname] = file.fieldname;
+        req[file.fieldname] =
+            Date.now() + "-" + file.fieldname + "-" + file.originalname;
 
         cb(null, req[file.fieldname]); //user id olsun resimlerin adlari
     },

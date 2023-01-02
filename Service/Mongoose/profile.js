@@ -4,7 +4,6 @@ const Student = require("../../Models/Mongoose/Student");
 const { options, cloudinary } = require("../../Config/cloudinaryConfig");
 const User = require("../../Models/Mongoose/User");
 
-
 module.exports = {
     myProfile: async(req) => {
         let profileDetails = {};
@@ -36,6 +35,7 @@ module.exports = {
         return { success: true, profiles };
     },
     editProfile: async(req) => {
+        const { NODE_ENV, CLOUDINARY_URL } = process.env;
         //update fields
         let updateFields = {};
         if (req.body.description) updateFields.description = req.body.description;
@@ -46,19 +46,20 @@ module.exports = {
             );
 
             const coverImage =
-                process.env.NODE_ENV == "development" ?
+                NODE_ENV == "development" ?
                 updatedCoverImage.url :
                 updatedCoverImage.secure_url;
             updateFields.coverImage = coverImage;
             await Profile.findOneAndUpdate({ userId: req.currentUser.id }, {...updateFields }, { new: true });
-        }
+        } else if (!req.files["coverImage"] && req.body.description)
+            await Profile.findOneAndUpdate({ userId: req.currentUser.id }, {...updateFields }, { new: true });
 
         if (req.files["profileImage"] && req.files["profileImage"][0].path != "") {
             const updatedProfileImage = await cloudinary.uploader.upload(
                 req.files["profileImage"][0].path, {...options, folder: "GraduationProject/ProfileImages" }
             );
             const profileImage =
-                process.env.NODE_ENV == "development" ?
+                NODE_ENV == "development" ?
                 updatedProfileImage.url :
                 updatedProfileImage.secure_url;
             await User.findByIdAndUpdate(

@@ -39,7 +39,7 @@ module.exports = {
         if (user) throw new CustomError(`${req.body.email} is already taken.`, 400);
 
         const newUserID = mongoose.Types.ObjectId();
-
+        console.log(req.profileImage);
         const newUser = new User({
             _id: newUserID,
             ...req.body,
