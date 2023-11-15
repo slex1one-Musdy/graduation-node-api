@@ -3,7 +3,6 @@ const Staff = require("../Models/Mongoose/Staff");
 
 const updateStudentModel = async(req) => {
     const studentUser = await Student.findOne({ userId: req.params.id });
-    console.log(studentUser);
     let studentField = {};
     if (req.body.studentNumber)
         studentField.studentNumber = req.body.studentNumber;
