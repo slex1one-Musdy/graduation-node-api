@@ -3,9 +3,7 @@ module.exports = {
     customErrorHandler: (err, req, res, next) => {
         //New error class from the CustomError class. (errorTest) middleware
         let customError = err;
-        console.log(customError.name);
-        console.log(customError.message);
-        console.log(customError);
+
         switch (customError.name) {
             case "Error":
                 customError = new CustomError(customError.message, customError.status);
