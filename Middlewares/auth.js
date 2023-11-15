@@ -21,7 +21,7 @@ module.exports = {
         } catch (error) {
             res.clearCookie("accessToken");
             res.clearCookie("sessionToken");
-            console.log(error.message);
+        
             return next(
                 new CustomError("Your session is expired.Please log in.", 401)
             );
